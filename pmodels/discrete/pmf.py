@@ -1,12 +1,16 @@
-from pmodels.utils.math import bang, combination
+from pmodels.utils.math import (
+    e,
+    bang, 
+    combination
+)
 
 class Bernoulli:
-    def __init__(self, index: float):
+    def __init__(self, index: float) -> None:
         if (index < 0) | (index > 1):
             raise ValueError('Index must be real number between 0 and 1')
         self.index: float = index
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Bernoulli({self.index})'
 
     def p(self, x: int) -> float:
@@ -20,7 +24,7 @@ class Bernoulli:
         )
 
 class Binomial:
-    def __init__(self, n: int, likelihood: float):
+    def __init__(self, n: int, likelihood: float) -> None:
         self.n: int            = n
         self.likelihood: float = Bernoulli(likelihood)
 
@@ -66,14 +70,13 @@ class Geometric:
     Hence the probability that that xth trial is the first success is
         P(X=x) = (1-p)^{x-1} * p
     '''
-    def __init__(self, likelihood: float):
+    def __init__(self, likelihood: float) -> None:
         self.likelihood: float = Bernoulli(likelihood)
     
     def __repr__(self) -> str:
         return f'G({self.likelihood.index})'
 
     def p(self, x: int) -> float:
-
         failures: int = 1
         for i in range(1, (x + 1) - 1, 1):
             failures *= self.likelihood.p(0)
@@ -84,7 +87,6 @@ class Geometric:
         return likelihood
 
     def F(self, x: int) -> float:
-        
         failures = 1
         for i in range(1, (x + 1), 1):
             failures *= self.likelihood.p(0)
@@ -92,3 +94,16 @@ class Geometric:
         likelihood: float = 1 - failures
         
         return likelihood
+
+class Poisson:
+    def __init__(self, λ: float) -> None:
+        self.λ = λ
+
+    def __repr__(self) -> str:
+        return f'Poisson({self.λ})'
+
+    def p(self, x: int) -> float:
+        numerator: float = e(self.λ * (-1)) * self.λ**x
+        denominator: int = bang(x)
+
+        return numerator/denominator

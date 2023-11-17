@@ -50,11 +50,6 @@ class Binomial:
         
         likelihood = n_x * successes * failures
         
-        '''The total number of successes: {x} \n
-        In total number of trials: {self.n} \n
-        With with probability: {self.likelihood.index} \n
-        Gives likelihood: {likelihood}
-        '''
         return likelihood
 
 class Geometric:
@@ -79,10 +74,9 @@ class Geometric:
         P(X=x) = (1-p)^{x-1} * p
     '''
     def __init__(self, likelihood: float):
-        print(f'Constructing Geometric distribution G({likelihood})')
         self.likelihood = Bernoulli(likelihood)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'G({self.likelihood.index})'
 
     def p(self, x: int) -> float:
@@ -95,11 +89,6 @@ class Geometric:
         
         likelihood = failures * success
         
-        '''
-        The probability p = {self.likelihood.index} is constant from trial to trial. \n
-        The likelihood of success trial {x} is {likelihood}.
-        '''
-        print(likelihood)
         return likelihood
 
     def F(self, x: int) -> float:
@@ -110,7 +99,4 @@ class Geometric:
         
         likelihood = 1 - failures
         
-        '''
-        The probability that we will see at most {x} trials is {result}.
-        '''
         return likelihood

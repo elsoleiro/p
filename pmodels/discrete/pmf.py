@@ -1,11 +1,13 @@
+from pmodels.utils.math import bang, combination
+
 class Bernoulli:
     def __init__(self, index: float):
         if (index < 0) | (index > 1):
             raise ValueError('Index must be real number between 0 and 1')
-        self.index = index
+        self.index: float = index
 
     def __repr__(self):
-        return f'Bernoulli({self.likelihood.index})'
+        return f'Bernoulli({self.index})'
 
     def p(self, x: int) -> float:
         match x:
@@ -19,36 +21,27 @@ class Bernoulli:
 
 class Binomial:
     def __init__(self, n: int, likelihood: float):
-        self.n = n
-        self.likelihood = Bernoulli(likelihood)
+        self.n: int            = n
+        self.likelihood: float = Bernoulli(likelihood)
 
     def __repr__(self):
         return f'B({self.n}, {self.likelihood.index})'
-
-    def bang(self, x: int) -> int:
-        res = 1
-        for i in range(1, x + 1, 1):
-            res *= i
-        return int(res)
-    
-    def combination(self, n: int, x: int) -> int:
-        return int(self.bang(n) / (self.bang(x)*self.bang(n - x)))
 
     def p(self, x: int) -> float:
         if x > self.n:
             raise ValueError('x not satisfy x ∈ {0, 1, 2, ... , n}')
 
-        n_x = self.combination(self.n, x)
+        n_x: int = combination(self.n, x)
 
-        successes = 1
+        successes: float = 1.0
         for i in range(1, (x + 1), 1):
             successes *= self.likelihood.p(1)
 
-        failures = 1
+        failures: float = 1.0
         for i in range(1, ((self.n - x) + 1), 1):
             failures *= self.likelihood.p(0)
         
-        likelihood = n_x * successes * failures
+        likelihood: float = n_x * successes * failures
         
         return likelihood
 
@@ -74,20 +67,19 @@ class Geometric:
         P(X=x) = (1-p)^{x-1} * p
     '''
     def __init__(self, likelihood: float):
-        self.likelihood = Bernoulli(likelihood)
+        self.likelihood: float = Bernoulli(likelihood)
     
     def __repr__(self) -> str:
         return f'G({self.likelihood.index})'
 
     def p(self, x: int) -> float:
 
-        failures = 1
+        failures: int = 1
         for i in range(1, (x + 1) - 1, 1):
             failures *= self.likelihood.p(0)
 
-        success = self.likelihood.index
-        
-        likelihood = failures * success
+        success: float    = self.likelihood.index
+        likelihood: float = failures * success
         
         return likelihood
 
@@ -97,6 +89,6 @@ class Geometric:
         for i in range(1, (x + 1), 1):
             failures *= self.likelihood.p(0)
         
-        likelihood = 1 - failures
+        likelihood: float = 1 - failures
         
         return likelihood

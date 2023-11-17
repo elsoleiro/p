@@ -6,3 +6,12 @@ def bang(x: int) -> int:
 
 def combination(n: int, x: int) -> int:
     return int(bang(n) / (bang(x)*bang(n - x)))
+
+def e(x: float) -> float:
+    N: int     = 100
+    res: float = 1
+
+    for n in range(1, N + 1, 1):
+        res += x**n / bang(n)
+
+    return res

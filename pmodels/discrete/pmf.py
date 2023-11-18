@@ -107,3 +107,23 @@ class Poisson:
         denominator: int = bang(x)
 
         return numerator/denominator
+
+class Uniform:
+    def __init__(self, n: int, m: int) -> None:
+        '''
+        The range of the random variable X is m, m+1, ... , n-1, n.
+        Where m = 1, p(x) = 1/n.
+        Where m = 0, p(x) = 1/n+1
+        '''
+        match m:
+            case 1: self.n, self.m = n, m
+            case 0: self.n, self.m = n, m
+            case _: raise ValueError('m must be 0 or 1')
+
+    def __repr__(self) -> str:
+        return f'Uniform({self.n}, {self.m})'
+
+    def p(self, x: int) -> float:
+        if x > self.n:
+            raise ValueError('x does not satisfy x = m, m+1, ..., n.')
+        return 1/(self.n - self.m + 1)
